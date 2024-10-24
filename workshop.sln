@@ -3,17 +3,20 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "workshop.wwwapi", "workshop.wwwapi\workshop.wwwapi.csproj", "{FF18BA0F-358D-4A99-82A2-81BD844568C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "workshop.wwwapi", "workshop.wwwapi\workshop.wwwapi.csproj", "{FF18BA0F-358D-4A99-82A2-81BD844568C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "workshop.wwwapp", "workshop.wwwapp\workshop.wwwapp.csproj", "{7470156C-52EE-4B68-B324-F6959737BA75}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "workshop.wwwapp", "workshop.wwwapp\workshop.wwwapp.csproj", "{7470156C-52EE-4B68-B324-F6959737BA75}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{71AFABAD-71BB-4CDA-8864-27083F90BFC6}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{FF18BA0F-358D-4A99-82A2-81BD844568C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -24,5 +27,11 @@ Global
 		{7470156C-52EE-4B68-B324-F6959737BA75}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7470156C-52EE-4B68-B324-F6959737BA75}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7470156C-52EE-4B68-B324-F6959737BA75}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A196C098-EF3B-4B96-BB1C-3E4B5294E65E}
 	EndGlobalSection
 EndGlobal
