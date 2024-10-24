@@ -1,6 +1,19 @@
 # AI Day 1 Workshop for C#
 
-Generate an entire web application using GitHub Copilot!
+Generate an entire web application using GitHub Copilot! 
+
+The rules:
+- no code was written during this workshop
+
+Thoughts on the experience:
+- Do I understand the code?
+- Is the code tidy?
+- Is the code efficient?
+- Is the code production worthy?
+- How much time did it save me?
+- How easy is this code to maintain?
+
+
 ![](./assets/welcome.png)
 This repository was setup using:
 
