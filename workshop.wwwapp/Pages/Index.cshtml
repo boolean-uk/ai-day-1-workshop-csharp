@@ -1,0 +1,190 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+<div class="container">
+    <h2>Car List</h2>
+    <table class="table table-striped" id="carTable">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Make</th>
+                <th>Model</th>
+                <th>Year</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Car rows will be inserted here by JavaScript -->
+        </tbody>
+    </table>
+
+    <h2>Add New Car</h2>
+    <form id="addCarForm">
+        <div class="form-group">
+            <label for="make">Make</label>
+            <input type="text" class="form-control" id="make" required>
+        </div>
+        <div class="form-group">
+            <label for="model">Model</label>
+            <input type="text" class="form-control" id="model" required>
+        </div>
+        <div class="form-group">
+            <label for="year">Year</label>
+            <input type="number" class="form-control" id="year" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Car</button>
+    </form>
+
+    <h2>Edit Car</h2>
+    <form id="editCarForm" style="display:none;">
+        <input type="hidden" id="editId">
+        <div class="form-group">
+            <label for="editMake">Make</label>
+            <input type="text" class="form-control" id="editMake" required>
+        </div>
+        <div class="form-group">
+            <label for="editModel">Model</label>
+            <input type="text" class="form-control" id="editModel" required>
+        </div>
+        <div class="form-group">
+            <label for="editYear">Year</label>
+            <input type="number" class="form-control" id="editYear" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Car</button>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('https://localhost:7183/cars')
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById('carTable').getElementsByTagName('tbody')[0];
+                    data.forEach(car => {
+                        addCarToTable(car, tableBody);
+                    });
+                })
+                .catch(error => console.error('Error fetching car data:', error));
+
+            document.getElementById('addCarForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                const make = document.getElementById('make').value;
+                const model = document.getElementById('model').value;
+                const year = document.getElementById('year').value;
+
+                const newCar = { make, model, year: parseInt(year) };
+
+                fetch('https://localhost:7183/cars', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(newCar)
+                })
+                .then(response => response.json())
+                .then(car => {
+                    const tableBody = document.getElementById('carTable').getElementsByTagName('tbody')[0];
+                    addCarToTable(car, tableBody);
+                    document.getElementById('addCarForm').reset();
+                })
+                .catch(error => console.error('Error adding car:', error));
+            });
+
+            document.getElementById('editCarForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                const id = document.getElementById('editId').value;
+                const make = document.getElementById('editMake').value;
+                const model = document.getElementById('editModel').value;
+                const year = document.getElementById('editYear').value;
+
+                const updatedCar = { id: parseInt(id), make, model, year: parseInt(year) };
+
+                fetch(`https://localhost:7183/cars/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updatedCar)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        const tableBody = document.getElementById('carTable').getElementsByTagName('tbody')[0];
+                        updateCarInTable(updatedCar, tableBody);
+                        document.getElementById('editCarForm').reset();
+                        document.getElementById('editCarForm').style.display = 'none';
+                    } else {
+                        console.error('Error updating car:', response.statusText);
+                    }
+                })
+                .catch(error => console.error('Error updating car:', error));
+            });
+        });
+
+        function addCarToTable(car, tableBody) {
+            const row = tableBody.insertRow();
+            row.insertCell(0).textContent = car.id;
+            row.insertCell(1).textContent = car.make;
+            row.insertCell(2).textContent = car.model;
+            row.insertCell(3).textContent = car.year;
+            const actionsCell = row.insertCell(4);
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Delete';
+            deleteButton.className = 'btn btn-danger';
+            deleteButton.onclick = function() {
+                deleteCar(car.id, row);
+            };
+            actionsCell.appendChild(deleteButton);
+
+            const editButton = document.createElement('button');
+            editButton.textContent = 'Edit';
+            editButton.className = 'btn btn-secondary';
+            editButton.onclick = function() {
+                editCar(car);
+            };
+            actionsCell.appendChild(editButton);
+        }
+
+        function updateCarInTable(car, tableBody) {
+            const rows = tableBody.getElementsByTagName('tr');
+            for (let row of rows) {
+                if (row.cells[0].textContent == car.id) {
+                    row.cells[1].textContent = car.make;
+                    row.cells[2].textContent = car.model;
+                    row.cells[3].textContent = car.year;
+                    break;
+                }
+            }
+        }
+
+        function deleteCar(id, row) {
+            fetch(`https://localhost:7183/cars/${id}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    row.remove();
+                } else {
+                    console.error('Error deleting car:', response.statusText);
+                }
+            })
+            .catch(error => console.error('Error deleting car:', error));
+        }
+
+        function editCar(car) {
+            document.getElementById('editId').value = car.id;
+            document.getElementById('editMake').value = car.make;
+            document.getElementById('editModel').value = car.model;
+            document.getElementById('editYear').value = car.year;
+            document.getElementById('editCarForm').style.display = 'block';
+        }
+    </script>
+}
